@@ -9,6 +9,6 @@ class Where(XPathBase, RelativeNavigationMixin):
         self.conditions = conditions
         super(Where, self).__init__(parent=parent)
 
-    def render_object(self):
+    def render_object(self, child=None):
         condition_xpath = ' and '.join(condition.render() for condition in self.conditions)
         return '[{condition_xpath}]'.format(condition_xpath=condition_xpath)

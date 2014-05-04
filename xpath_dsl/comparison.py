@@ -6,5 +6,5 @@ class Equals(XPathBase):
         self.value = value
         super(Equals, self).__init__(parent=parent)
 
-    def render_object(self):
+    def render_object(self, child=None):
         return '="{value}"'.format(value=self.value)

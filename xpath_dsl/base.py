@@ -14,14 +14,14 @@ class XPathBase(object):
     def __str__(self):
         return self.render()
 
-    def render_object(self):
+    def render_object(self, child=None):
         raise NotImplementedError()
 
-    def render(self):
+    def render(self, child=None):
         if self._parent:
-            return self._parent.render() + self.render_object()
+            return self._parent.render(child=self) + self.render_object(child=child)
         else:
-            return self.render_object()
+            return self.render_object(child=child)
 
     def __or__(self, other):
         raise NotImplementedError()

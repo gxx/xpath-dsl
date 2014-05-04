@@ -26,25 +26,36 @@ class Path(XPathBase):
 
 
 class Root(Path):
-    def render_object(self):
+    def render_object(self, child=None):
         return '/'
 
 
 class Any(Path):
-    def render_object(self):
+    def render_object(self, child=None):
         return '//'
 
 
 class Current(Path, RelativeNavigationMixin):
-    def render_object(self):
+    def render_object(self, child=None):
+        # TODO: determine if always relative?
         if self._parent:
             return '/.'
         else:
             return '.'
 
 
+class Descendant(Path, RelativeNavigationMixin):
+    def __init__(self, identifier, parent=None):
+        self.identifier = identifier
+        super(Descendant, self).__init__(parent=parent)
+
+    def render_object(self, child=None):
+        return '/{identifier}'.format(identifier=self.identifier)
+
+
 class Parent(Path, RelativeNavigationMixin):
-    def render_object(self):
+    def render_object(self, child=None):
+        # TODO: same as determine on relative as above
         if self._parent:
             return '/..'
         else:
