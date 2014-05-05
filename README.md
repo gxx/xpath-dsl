@@ -3,6 +3,12 @@
 A programmatic DSL for manipulating XPath queries without actually executing them.
 This is useful for things such as creating complex, chainable queries without hard-coding logic. For example, passing a built XPath to Selenium.
 
+## Build Status
+
+[![Build Status](https://travis-ci.org/Andrew-Crosio/xpath-dsl.svg?branch=master)](https://travis-ci.org/Andrew-Crosio/xpath-dsl)
+
+[![Coverage Status](https://coveralls.io/repos/Andrew-Crosio/xpath-dsl/badge.png)](https://coveralls.io/r/Andrew-Crosio/xpath-dsl)
+
 # Usages
 
 ```python
