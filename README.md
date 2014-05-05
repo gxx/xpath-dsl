@@ -1,6 +1,7 @@
 # XPath DSL
 
-Blah Blah some description
+A programmatic DSL for manipulating XPath queries without actually executing them.
+This is useful for things such as creating complex, chainable queries without hard-coding logic. For example, passing a built XPath to Selenium.
 
 # Usages
 

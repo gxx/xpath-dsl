@@ -3,4 +3,4 @@ pinocchio==0.3.1
 coverage==3.7.1
 nose-exclude==0.2.0
 should-dsl==2.1.2
-
+coveralls==0.4.1
