@@ -24,8 +24,6 @@ class XPathBase(object):
             return self.render_object(child=child)
 
     def __or__(self, other):
-        raise NotImplementedError()
+        # TODO: fix this
+        from xpath_dsl.conditional import Or
         return Or(self, other)
-
-
-# from xpath_dsl.builder import Or

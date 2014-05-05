@@ -4,6 +4,7 @@ from should_dsl import should
 
 from xpath_dsl import Attribute
 from xpath_dsl import Builder
+from xpath_dsl import Text
 
 
 class FunctionalTestCase(TestCase):
@@ -30,3 +31,19 @@ class FunctionalTestCase(TestCase):
             Builder().current.any.node.text.normalized.equals('This is a label')
         ).descendant('input').render()
         xpath | should | equal_to('//label[normalize-space(.//*/text())="This is a label"]/input')
+
+    def test_select_complex_input_descendant_selection_with_or_condition(self):
+        xpath = (
+            Builder().any.node('label').where(
+                Builder().current.any.node.text.normalized.equals('This is a label')
+            ).descendant('input')
+            |
+            Builder().any.node('label').where(
+                Text().normalized.equals('This is a label')
+            ).descendant('input')
+        ).render()
+
+        xpath | should | equal_to(
+            '//label[normalize-space(.//*/text())="This is a label"]/input'
+            '|//label[normalize-space(text())="This is a label"]/input'
+        )
