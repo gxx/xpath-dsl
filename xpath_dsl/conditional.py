@@ -13,6 +13,10 @@ class Where(XPathBase, RelativeNavigationMixin):
         condition_xpath = ' and '.join(condition.render() for condition in self.conditions)
         return '[{condition_xpath}]'.format(condition_xpath=condition_xpath)
 
+    def where(self, *conditions):
+        # It is possible to chain predicates
+        return Where(*conditions, parent=self)
+
 
 class Or(XPathBase):
     def __init__(self, *nodes, **kwargs):
