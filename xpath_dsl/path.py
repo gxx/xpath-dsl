@@ -44,15 +44,6 @@ class Current(Path, RelativeNavigationMixin):
             return '.'
 
 
-class Descendant(Path, RelativeNavigationMixin):
-    def __init__(self, identifier, parent=None):
-        self.identifier = identifier
-        super(Descendant, self).__init__(parent=parent)
-
-    def render_object(self, child=None):
-        return '/{identifier}'.format(identifier=self.identifier)
-
-
 class Parent(Path, RelativeNavigationMixin):
     def render_object(self, child=None):
         # TODO: same as determine on relative as above
