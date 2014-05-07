@@ -4,7 +4,13 @@ from xpath_dsl.mixins import AnyNodeOrSpecifiedMixin
 
 
 class Path(XPathBase, AnyNodeOrSpecifiedMixin):
-    pass
+    def render(self, child=None):
+        # TODO: refactor this to have a common base with axes
+        value = super(Path, self).render()
+        if child and not isinstance(child, (Node, Path)):
+            value += '*'
+
+        return value
 
 
 class Root(Path):
@@ -33,3 +39,6 @@ class Parent(Path, RelativeNavigationMixin):
             return '/..'
         else:
             return '..'
+
+
+from xpath_dsl.node import Node

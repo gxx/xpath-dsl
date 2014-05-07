@@ -4,6 +4,7 @@ from xpath_dsl.mixins import ConditionalMixin
 from xpath_dsl.mixins import RelativeNavigationMixin
 
 
+# TODO: rename this node and node as element
 class NodeBase(XPathBase):
     pass
 
@@ -60,6 +61,16 @@ class NormalizedText(Text, ComparisonMixin):
 
     def render(self, child=None):
         return 'normalize-space({path})'.format(path=self._parent.render())
+
+
+# TODO: validate the difference between comparable expressions and those that arent
+class Attribute(XPathBase, ComparisonMixin):
+    def __init__(self, identifier='*', parent=None):
+        self.identifier = identifier
+        super(Attribute, self).__init__(parent=parent)
+
+    def render_object(self, child=None):
+        return '@{identifier}'.format(identifier=self.identifier)
 
 
 from xpath_dsl.path import Path

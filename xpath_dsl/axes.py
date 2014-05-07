@@ -1,7 +1,7 @@
 from xpath_dsl.base import XPathBase
 from xpath_dsl.mixins import AnyNodeOrSpecifiedMixin
 from xpath_dsl.mixins import ConditionalMixin
-from xpath_dsl.node import Node
+from xpath_dsl.node import NodeBase
 
 
 # TODO: separate location base Axes from non-location based ones (i.e. attributes are not nodes)
@@ -19,8 +19,8 @@ class AxisBase(XPathBase, AnyNodeOrSpecifiedMixin, ConditionalMixin):
 
     def render_object(self, child=None):
         # TODO: make this work for all, abstract to some sort of join method
-        rendered_text =  self.axis_name + self.AXIS_JOINER
-        if not isinstance(child, Node):
+        rendered_text = self.axis_name + self.AXIS_JOINER
+        if not isinstance(child, NodeBase):
             rendered_text += '*'
 
         return rendered_text
