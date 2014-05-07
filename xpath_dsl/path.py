@@ -1,9 +1,10 @@
 from xpath_dsl.base import XPathBase
+from xpath_dsl.mixins import ConditionalMixin
 from xpath_dsl.mixins import RelativeNavigationMixin
 from xpath_dsl.mixins import AnyNodeOrSpecifiedMixin
 
 
-class Path(XPathBase, AnyNodeOrSpecifiedMixin):
+class Path(XPathBase, AnyNodeOrSpecifiedMixin, ConditionalMixin):
     def render(self, child=None):
         # TODO: refactor this to have a common base with axes
         value = super(Path, self).render()
