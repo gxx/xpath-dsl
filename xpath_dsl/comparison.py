@@ -7,4 +7,7 @@ class Equals(XPathBase):
         super(Equals, self).__init__(parent=parent)
 
     def render_object(self, child=None):
-        return '="{value}"'.format(value=self.value)
+        try:
+            return '={value}'.format(value=self.value.render())
+        except AttributeError:
+            return '="{value}"'.format(value=self.value)
