@@ -47,3 +47,14 @@ class FunctionalTestCase(TestCase):
             '//label[normalize-space(.//*/text())="This is a label"]/input'
             '|//label[normalize-space(text())="This is a label"]/input'
         )
+
+    def test_select_label_descendant_input_using_where_query_with_axis(self):
+        xpath = Builder().any.node('label').where(
+            Builder().descendant_or_self.where(
+                Text().normalized.equals('This is a label')
+            )
+        ).any.node('input').render()
+
+        xpath | should | equal_to(
+            '//label[descendant-or-self::*[normalize-space(text())="This is a label"]]//input'
+        )

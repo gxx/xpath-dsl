@@ -1,28 +1,17 @@
 from xpath_dsl.base import XPathBase
+from xpath_dsl.mixins import ConditionalMixin
 from xpath_dsl.mixins import RelativeNavigationMixin
-from xpath_dsl.node import Node
+from xpath_dsl.mixins import AnyNodeOrSpecifiedMixin
 
 
-class LazyNode(XPathBase):
-    """Allows a node its default, and changes this if called with arguments"""
-    def __init__(self, identifier='*', parent=None):
-        self.identifier = identifier
-        super(LazyNode, self).__init__(parent=parent)
+class Path(XPathBase, AnyNodeOrSpecifiedMixin, ConditionalMixin):
+    def render(self, child=None):
+        # TODO: refactor this to have a common base with axes
+        value = super(Path, self).render()
+        if child and not isinstance(child, (Node, Path)):
+            value += '*'
 
-    def __call__(self, identifier='*'):
-        return Node(identifier, parent=self._parent)
-
-    def __getattr__(self, item):
-        # No need to store state, there is no need for being able to build from top to bottom
-        # since building the query is performed bottom to top.
-        node = Node(self.identifier, parent=self._parent)
-        return getattr(node, item)
-
-
-class Path(XPathBase):
-    @property
-    def node(self):
-        return LazyNode(parent=self)
+        return value
 
 
 class Root(Path):
@@ -44,15 +33,6 @@ class Current(Path, RelativeNavigationMixin):
             return '.'
 
 
-class Descendant(Path, RelativeNavigationMixin):
-    def __init__(self, identifier, parent=None):
-        self.identifier = identifier
-        super(Descendant, self).__init__(parent=parent)
-
-    def render_object(self, child=None):
-        return '/{identifier}'.format(identifier=self.identifier)
-
-
 class Parent(Path, RelativeNavigationMixin):
     def render_object(self, child=None):
         # TODO: same as determine on relative as above
@@ -60,3 +40,6 @@ class Parent(Path, RelativeNavigationMixin):
             return '/..'
         else:
             return '..'
+
+
+from xpath_dsl.node import Node

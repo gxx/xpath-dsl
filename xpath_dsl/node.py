@@ -1,13 +1,15 @@
 from xpath_dsl.base import XPathBase
-from xpath_dsl.conditional import Where
 from xpath_dsl.mixins import ComparisonMixin
+from xpath_dsl.mixins import ConditionalMixin
+from xpath_dsl.mixins import RelativeNavigationMixin
 
 
+# TODO: rename this node and node as element
 class NodeBase(XPathBase):
     pass
 
 
-class Node(XPathBase):
+class Node(XPathBase, RelativeNavigationMixin, ConditionalMixin):
     def __init__(self, identifier='*', parent=None):
         self.identifier = identifier
         super(Node, self).__init__(parent=parent)
@@ -16,16 +18,32 @@ class Node(XPathBase):
     def text(self):
         return Text(parent=self)
 
+    def get_identifier(self):
+        return self.identifier
+
     def render_object(self, child=None):
         # Separate nodes from each other
         # TODO: simpler way to do this
         if child and isinstance(child, NodeBase):
-            return self.identifier + '/'
+            xpath = self.get_identifier() + '/'
         else:
-            return self.identifier
+            xpath = self.get_identifier()
 
-    def where(self, *conditions):
-        return Where(*conditions, parent=self)
+        # TODO: simpler way to do this, too
+        # If we are joining a node to a path,
+        if (
+                self._parent
+                and isinstance(self._parent, Path)
+                and not self._parent.render_object(child=self).endswith('/')
+        ):
+            xpath = '/' + xpath
+
+        return xpath
+
+
+class Descendant(Node, RelativeNavigationMixin, ConditionalMixin):
+    def get_identifier(self):
+        return '/{identifier}'.format(identifier=self.identifier)
 
 
 class Text(NodeBase, ComparisonMixin):
@@ -43,3 +61,16 @@ class NormalizedText(Text, ComparisonMixin):
 
     def render(self, child=None):
         return 'normalize-space({path})'.format(path=self._parent.render())
+
+
+# TODO: validate the difference between comparable expressions and those that arent
+class Attribute(XPathBase, ComparisonMixin):
+    def __init__(self, identifier='*', parent=None):
+        self.identifier = identifier
+        super(Attribute, self).__init__(parent=parent)
+
+    def render_object(self, child=None):
+        return '@{identifier}'.format(identifier=self.identifier)
+
+
+from xpath_dsl.path import Path
