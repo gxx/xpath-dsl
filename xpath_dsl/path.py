@@ -27,7 +27,7 @@ class Any(Path):
 class Current(Path, RelativeNavigationMixin):
     def render_object(self, child=None):
         # TODO: determine if always relative?
-        if self._parent:
+        if self.parent_node:
             return '/.'
         else:
             return '.'
@@ -36,7 +36,7 @@ class Current(Path, RelativeNavigationMixin):
 class Parent(Path, RelativeNavigationMixin):
     def render_object(self, child=None):
         # TODO: same as determine on relative as above
-        if self._parent:
+        if self.parent_node:
             return '/..'
         else:
             return '..'

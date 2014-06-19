@@ -39,12 +39,12 @@ class LazyNode(XPathBase):
         super(LazyNode, self).__init__(parent=parent)
 
     def __call__(self, identifier='*'):
-        return Node(identifier, parent=self._parent)
+        return Node(identifier, parent=self.parent_node)
 
     def __getattr__(self, item):
         # No need to store state, there is no need for being able to build from top to bottom
         # since building the query is performed bottom to top.
-        node = Node(self.identifier, parent=self._parent)
+        node = Node(self.identifier, parent=self.parent_node)
         return getattr(node, item)
 
 

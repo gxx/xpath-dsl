@@ -32,9 +32,9 @@ class Node(XPathBase, RelativeNavigationMixin, ConditionalMixin):
         # TODO: simpler way to do this, too
         # If we are joining a node to a path,
         if (
-                self._parent
-                and isinstance(self._parent, Path)
-                and not self._parent.render_object(child=self).endswith('/')
+                self.parent_node
+                and isinstance(self.parent_node, Path)
+                and not self.parent_node.render_object(child=self).endswith('/')
         ):
             xpath = '/' + xpath
 
@@ -60,7 +60,7 @@ class NormalizedText(Text, ComparisonMixin):
         super(NormalizedText, self).__init__(parent=parent)
 
     def render(self, child=None):
-        return 'normalize-space({path})'.format(path=self._parent.render())
+        return 'normalize-space({path})'.format(path=self.parent_node.render())
 
 
 # TODO: validate the difference between comparable expressions and those that arent
